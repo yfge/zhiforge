@@ -1,0 +1,11 @@
+# 本地配置（包含路径等敏感信息）
+.claude/settings.json
+.claude/settings.local.json
+
+# 临时文件
+*.tmp
+*.bak
+.DS_Store
+
+# 验证目录
+docker-verify/

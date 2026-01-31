@@ -1,0 +1,13 @@
+{
+  "blog_path": "/path/to/your/blog/_posts",
+  "blog_url": "https://your-blog.github.io",
+  "author": {
+    "zhihu_name": "你的知乎昵称",
+    "wechat_official": "你的公众号名称",
+    "bio": "你的简介"
+  },
+  "expertise": [
+    "领域1",
+    "领域2"
+  ]
+}
