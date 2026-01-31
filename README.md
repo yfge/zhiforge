@@ -1,6 +1,6 @@
-# zhihu-auto-answer
+# 知炼 (ZhiForge)
 
-自动化知乎回答的 Claude Code Skill。
+将知识库炼化为知乎回答的 Claude Code Skill。
 
 ## 功能
 
@@ -39,8 +39,8 @@
 ## 安装
 
 ```bash
-git clone https://github.com/yfge/zhihu-auto-answer.git
-cd zhihu-auto-answer
+git clone https://github.com/yfge/zhiforge.git
+cd zhiforge
 
 # 复制配置模板
 cp .claude/settings.example.json .claude/settings.json

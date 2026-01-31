@@ -1,6 +1,6 @@
-# zhihu-auto-answer
+# 知炼 (ZhiForge)
 
-自动化知乎回答的 Claude Code Skill。
+将知识库炼化为知乎回答的 Claude Code Skill。
 
 ## 配置文件
 
