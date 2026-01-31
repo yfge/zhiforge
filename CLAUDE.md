@@ -8,11 +8,11 @@
 
 ```json
 {
-  "blog_path": "/path/to/your/blog/_posts",  // 博客文章目录（知识库）
-  "blog_url": "https://your-blog.github.io", // 博客在线地址
-  "author": { ... },                          // 作者信息
-  "expertise": [ ... ],                       // 专业领域
-  "high_match_topics": [ ... ]                // 高匹配度话题
+  "knowledge_base": "/path/to/markdown/files", // 知识库目录（存放 .md 文件）
+  "blog_url": "https://your-blog.github.io",   // 可选，用于文章结尾引导
+  "author": { ... },                            // 作者信息
+  "expertise": [ ... ],                         // 专业领域
+  "high_match_topics": [ ... ]                  // 高匹配度话题
 }
 ```
 

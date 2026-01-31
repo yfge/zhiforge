@@ -13,12 +13,12 @@
 
 ### 知识库目录
 
-在 `.claude/settings.json` 中配置博客文章位置：
+在 `.claude/settings.json` 中配置：
 
 ```json
 {
-  "blog_path": "/path/to/your/blog/_posts",
-  "blog_url": "https://your-blog.github.io"
+  "knowledge_base": "/path/to/your/markdown/files",  // 存放 .md 文件的目录
+  "blog_url": "https://your-blog.github.io"          // 可选，用于文章结尾引导
 }
 ```
 

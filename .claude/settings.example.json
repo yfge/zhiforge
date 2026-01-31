@@ -1,5 +1,5 @@
 {
-  "blog_path": "/path/to/your/blog/_posts",
+  "knowledge_base": "/path/to/your/markdown/files",
   "blog_url": "https://your-blog.github.io",
   "author": {
     "zhihu_name": "你的知乎昵称",

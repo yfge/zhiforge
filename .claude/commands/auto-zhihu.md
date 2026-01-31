@@ -35,8 +35,8 @@
 
 ## 第二步：匹配博客内容
 
-1. 读取 `.claude/settings.json` 获取 `blog_path` 配置
-2. 搜索博客目录（使用配置中的路径）
+1. 读取 `.claude/settings.json` 获取 `knowledge_base` 配置
+2. 搜索知识库目录中的 .md 文件
 3. 根据问题关键词匹配相关文章
 4. 读取匹配的博客文章内容
 
