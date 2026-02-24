@@ -69,7 +69,7 @@ metadata: {"openclaw": {"emoji": "🔥"}}
   - ❌ "在这个A的时代" / "A，而非B"
   - 这些是最容易被读者识别为 AI 生成的句式，一个都别用
 
-将文章写入 `/tmp/zhihu-article.md`
+将文章写入 `workspace/stories/zhihu/YYYY-MM-DD-<slug>.md`（持久化存储，不用 /tmp/）
 
 ### Step 6: 发布文章
 **必须使用专栏页面发布**（避免反爬）：
