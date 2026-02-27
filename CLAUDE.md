@@ -34,6 +34,7 @@
 | `2026-01-25-半天上线gentskill.work...md` | AI 快速开发实战 | AI 编程效率、实战案例 |
 | `2025-11-13-写在ai-shifu的v1.0.3.md` | AI-Shifu 项目 | 开源项目、AI 教育 |
 | `2025-10-20-AI在变坏.md` | AI 发展思考 | AI 伦理、趋势 |
+| `2026-02-27-my-lobster-came-alive.md` | OpenClaw 本地 AI Agent 实战 | AI Agent、本地部署、OpenClaw |
 
 ### 技术深度系列
 | 文件名 | 主题 |
@@ -50,5 +51,10 @@
 
 ## 依赖
 
+**OpenClaw 模式（推荐）：**
+- OpenClaw browser 工具（内置，无需额外安装）
+- 知乎账号已登录（browser profile "openclaw"）
+
+**Claude Code 模式：**
 - Chrome MCP Server（用于操作知乎页面）
 - 知乎账号已登录（在 Chrome 中）

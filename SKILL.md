@@ -40,14 +40,18 @@ metadata: {"openclaw": {"emoji": "🔥"}}
 3. 也检查回答列表：`https://www.zhihu.com/creator/manage/creation/answer`
 
 ### Step 3: 搜索热点问题
-两种来源：
-- **邀请回答**：`https://www.zhihu.com/creator/featured-question/invited`
+三种来源（优先级从高到低）：
+- **邀请回答**：`https://www.zhihu.com/creator/featured-question/invited`（转化率最高）
 - **搜索热点**：用专业领域关键词搜索 `https://www.zhihu.com/search?type=content&q=...`
+- **手动指定**：用户直接给出问题 URL 或标题
 
-筛选标准：
+筛选标准（问题质量 > 故事质量）：
 - 与知识库匹配度高（AI编程/vibe-coding/Claude Code 等）
-- 回答数少、关注数多的优先
+- **关注者数 > 100** 的优先（关注者越多推荐流量越大）
+- **回答数 < 200** 的优先（太多回答难以获得曝光）
+- **浏览量 > 10K** 的优先
 - 排除已回答过的（标题相似度 > 80%）
+- **问题调性匹配**：问题的受众要和文章内容对得上，否则阅读量高但赞同为 0
 
 ### Step 4: 匹配知识库
 1. 搜索 knowledge_base 目录中的 .md 文件
@@ -109,23 +113,61 @@ metadata: {"openclaw": {"emoji": "🔥"}}
 
 将文章写入 `workspace/stories/zhihu/YYYY-MM-DD-<slug>.md`（持久化存储，不用 /tmp/）
 
+### Step 5b: 博客直发模式（从已有博客文章发布）
+当用户指定一篇已有的博客文章（而非自动匹配生成）时：
+1. 读取博客原文
+2. **适当改写**为知乎风格（去掉 Jekyll frontmatter、调整格式、加知乎引导语）
+3. 不需要大幅重写——博客本身就是知识库内容
+4. 保存到 `workspace/stories/zhihu/YYYY-MM-DD-<slug>.md`
+5. 跳到 Step 6 发布
+
 ### Step 6: 发布文章
 **必须使用专栏页面发布**（避免反爬）：
 
-1. 打开 `https://zhuanlan.zhihu.com/write`
-2. 点击"导入" → "导入文档" → 上传 markdown 文件
-3. 等待导入完成（正文出现内容）
-4. 填写标题（在标题输入框中 type）
-5. 点击"投稿至问题"下拉框 → 搜索目标问题关键词 → 点"选择" → 点"确定"
-6. 点击"发布"按钮
-7. 等待跳转（URL 变化表示成功）
+#### 6a. 准备文件
+1. 将 markdown 文件复制到浏览器上传目录：
+   ```
+   /var/folders/zp/8m3zqqgj2fb0_njgh6scd8qm0000gn/T/openclaw-501/uploads/
+   ```
+   **必须！** browser upload 工具只能读取这个目录下的文件。
+
+#### 6b. 导入 Markdown
+1. 打开 `https://zhuanlan.zhihu.com/write`（每次新页面，导入是追加不是替换）
+2. snapshot 获取页面结构
+3. 找到并点击 **"导入"** 按钮（通常在工具栏区域，文字为"导入"）
+4. 在弹出的下拉/菜单中，点击 **"导入文档"**
+5. 此时会触发文件选择对话框 → 使用 `browser action=upload paths=["/path/to/uploads/xxx.md"]`
+6. 等待 2-3 秒，正文区域出现导入内容
+7. snapshot 确认正文已有内容
+
+#### 6c. 填写标题
+1. 找到标题输入框（placeholder 通常为"请输入标题"）
+2. click 聚焦标题框
+3. type 输入标题文字
+
+#### 6d. 投稿至问题（可选但强烈推荐）
+1. 在页面右侧或底部找到"投稿至问题"区域
+2. 如果是折叠的，先 click 展开
+3. 在搜索框中 type 输入问题关键词（2-4 个字即可，太长搜不到）
+4. 等待 1-2 秒出现搜索结果
+5. 在结果列表中找到目标问题，点击 **"选择"** 按钮
+6. 确认问题已选中（显示问题标题）
+
+#### 6e. 发布
+1. 点击 **"发布"** 按钮
+2. 如果弹出确认对话框（如话题选择），按需处理后确认
+3. 等待页面跳转，URL 变为 `zhuanlan.zhihu.com/p/xxxxx` 表示成功
+4. 记录发布链接
 
 **关键坑点：**
+- **文件必须在 uploads 目录**：browser upload 无法读取其他路径
 - 不能直接 fill 正文，markdown 语法会变纯文本 → 必须用导入
 - 导入是追加不是替换 → 每次打开新的 write 页面
 - 投稿至问题的搜索框是 combobox → 先 click 聚焦再输入
+- 搜索关键词不宜太长，2-4 个核心词效果最好
 - 对话框用 Escape 关闭
 - 发布按钮可能 disabled → 要等标题和正文都有内容
+- **发布后默认开启赞赏**（送礼物设置 → 开启）
 
 ### Step 7: 质量审核（交叉验证）
 发布后，用另一个模型（如 qwen）审核文章质量：
@@ -137,11 +179,14 @@ metadata: {"openclaw": {"emoji": "🔥"}}
 
 ### Step 8: 回存知识库（闭环）
 如果质量审核通过：
-1. 在文章开头加上 Jekyll frontmatter（layout、title、tags）
+1. 在文章开头加上 Jekyll frontmatter（layout: post、title、date、tags）
 2. 保存到 `blog_repo/_posts/YYYY-MM-DD-标题.md`
-3. `git add` + `git commit` + `git push`
+3. `git add` + `git commit` + `git push origin master`
+   - **注意**：blog repo 的默认分支是 `master`（不是 main）
 
 这样知乎文章反向充实了博客知识库，形成正向循环。
+
+**博客直发模式下跳过此步**（文章本来就来自博客）。
 
 ### Step 9: 输出报告
 
@@ -162,20 +207,29 @@ metadata: {"openclaw": {"emoji": "🔥"}}
 
 | 操作 | 命令 |
 |------|------|
+| 启动浏览器 | `browser action=start profile="openclaw"` |
 | 打开页面 | `browser action=navigate targetUrl="..."` |
 | 获取内容 | `browser action=snapshot compact=true` |
 | 点击 | `browser action=act request={kind:"click", ref:"..."}` |
 | 输入 | `browser action=act request={kind:"type", ref:"...", text:"..."}` |
 | 按键 | `browser action=act request={kind:"press", key:"Escape"}` |
-| 上传文件 | `browser action=upload paths=["/path/to/file"]` |
+| 上传文件 | `browser action=upload paths=["/path/to/uploads/file"]` |
 | 截图 | `browser action=screenshot` |
 | 等待 | `browser action=act request={kind:"wait", timeMs:3000}` |
+| 关闭浏览器 | `browser action=stop` |
+
+**重要规则：**
+- 文件上传路径必须是 uploads 目录：`/var/folders/zp/8m3zqqgj2fb0_njgh6scd8qm0000gn/T/openclaw-501/uploads/`
+- 先 `cp` 文件到 uploads 目录，再用 `browser action=upload`
+- **用完浏览器后必须 `browser action=stop`**，不要让 Chrome 一直开着
 
 ## 其他命令
 
 - **"检查知乎邀请"**：只执行 Step 2-3，列出可回答问题
 - **"草拟知乎回答 [问题]"**：只执行 Step 4-5，不发布
 - **"知乎热点"**：搜索热点 + 全流程
+- **"发博客到知乎 [文件名/路径]"**：博客直发模式（Step 5b → 6 → 7），跳过知识库匹配
+- **"发到知乎 [问题URL]"**：指定问题投稿，跳过 Step 3 搜索
 
 详细命令模板见 `{baseDir}/.claude/commands/*.md`
 
